@@ -1,9 +1,10 @@
 let listItems = [];
+let currentlySelectedButton = "all";
 //logic for creating list elements from object
-function createListItem(obj, ind) {
+function createListItem(obj) {
   let li = document.createElement('li');
   li.className = 'item';
-  li.dataset.index = ind;
+  li.dataset.index = obj.index;
   //add necessary event listeners
   li.addEventListener('mouseenter', function (event) {
     cross.hidden = false;
@@ -71,9 +72,8 @@ function render(type) {
     newList = listItems.filter(item => item.type == type);
   }
 
-  let ind = 0;
   for (itemObj of newList) {
-    fragment.appendChild(createListItem(itemObj, ind++));
+    fragment.appendChild(createListItem(itemObj));
   }
   //insert the elements
   document.getElementById('to_do_list').innerHTML = '';
@@ -88,16 +88,11 @@ function render(type) {
   tasksLeftField(num);
 }
 
-//logic for recreating listItems form DOM
+//logic for re arranging array
 function reCreate() {
-  let newListItems = [];
-  for (item of document.getElementById('to_do_list').children) {
-    newListItems.push({
-      text: item.firstElementChild.nextElementSibling.innerHTML,
-      type: item.firstElementChild.className
-    })
+  for (let i = 0; i < listItems.length; i++) {
+    listItems[i].index = i;
   }
-  listItems = newListItems;
 }
 
 let inputField = document.getElementById('input_item');
@@ -108,10 +103,11 @@ inputField.addEventListener('keydown', function (event) {
     //enter the item
     listItems.push({
       text: inputField.value,
-      type: "unTicked"
+      type: "unTicked",
+      index: listItems.length
     });
     //render the list
-    render('all');
+    render(currentlySelectedButton);
     //clear the input field
     inputField.value = null;
   }
@@ -130,20 +126,23 @@ document.addEventListener('click', function (event) {
   } else if (targetElem.className == 'unTicked') { //make it ticked
     let ind = targetElem.closest('li').dataset.index;
     listItems[ind].type = "ticked";
-    render('all');
+    render(currentlySelectedButton);
   } else if (targetElem.className == 'cross') {
-    let item = targetElem.closest('li');
+    let ind = targetElem.closest('li').dataset.index;
     //remove the item from the list
-    item.remove();
+    listItems.splice(ind, 1);
     //update the listItems
     reCreate();
     // render the list
-    render('all');
+    render(currentlySelectedButton);
   } else if (targetElem.id == 'all') {
-    render('all');
+    currentlySelectedButton = 'all';
+    render(currentlySelectedButton);
   } else if (targetElem.id == 'finished') {
-    render('ticked');
+    currentlySelectedButton = 'ticked';
+    render(currentlySelectedButton);
   } else if (targetElem.id == 'unfinished') {
-    render('unTicked');
+    currentlySelectedButton = 'unTicked';
+    render(currentlySelectedButton);
   }
 })
