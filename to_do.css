@@ -41,9 +41,9 @@ h1 {
   margin: 10px;
   font-size: 1.5em;
   padding: 10px;
-  height: 30px;
   width: 90%;
   border: 0px solid blue;
+  text-align: center;
 }
 
 .item:hover {
@@ -51,12 +51,17 @@ h1 {
 }
 
 .cross {
-  padding: 5px;
+  float: right;
+  margin-top: -3px;
+  width: 30px;
+  height: 30px;
+  padding: 1px;
   background-color: white;
   border: 1px solid oldlace;
   box-shadow: 1px 1px 5px red;
   color: firebrick;
   border-radius: 5px;
+  cursor: pointer;
 }
 
 .cross:hover {
@@ -76,6 +81,7 @@ h1 {
 .unTicked:hover,
 .ticked:hover {
   box-shadow: 2px 2px 20px forestgreen;
+  cursor: pointer;
 }
 
 .ticked {
@@ -112,6 +118,7 @@ h1 {
 
 #options button:hover {
   box-shadow: 2px 2px 20px gold;
+  cursor: pointer;
 }
 
 #options .active,
