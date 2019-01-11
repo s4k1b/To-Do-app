@@ -42,13 +42,17 @@ function createListItem(obj, ind) {
 //logic for rendering the list
 function render(type) {
   let fragment = document.createDocumentFragment();
+  let newList = [];
   if (type == 'all') {
-    let ind = 0;
-    for (itemObj of listItems) {
-      fragment.appendChild(createListItem(itemObj, ind++));
-    }
+    newList = listItems;
+  } else {
+    newList = listItems.filter(item => item.type == type);
   }
 
+  let ind = 0;
+  for (itemObj of newList) {
+    fragment.appendChild(createListItem(itemObj, ind++));
+  }
   //insert the elements
   document.getElementById('to_do_list').innerHTML = '';
   //console.log("appeinding Child");
@@ -87,8 +91,9 @@ inputField.addEventListener('keydown', function (event) {
 //add event listeners for tick and cross
 
 document.addEventListener('click', function (event) {
-  let targetElem = event.target.closest(".ticked, .unTicked, .cross, #all, #finished #unfinished");
+  let targetElem = event.target.closest(".ticked, .unTicked, .cross, #all, #finished, #unfinished");
 
+  console.log(targetElem);
   if (!targetElem) return;
 
   if (targetElem.className == 'ticked') { //make it unticked
@@ -107,5 +112,11 @@ document.addEventListener('click', function (event) {
     reCreate();
     // render the list
     render('all');
+  } else if (targetElem.id == 'all') {
+    render('all');
+  } else if (targetElem.id == 'finished') {
+    render('ticked');
+  } else if (targetElem.id == 'unfinished') {
+    render('unTicked');
   }
 })
