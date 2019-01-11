@@ -1,8 +1,9 @@
 let listItems = [];
 //logic for creating list elements from object
-function createListItem(obj) {
+function createListItem(obj, ind) {
   let li = document.createElement('li');
   li.className = 'item';
+  li.dataset.index = ind;
 
   //create tick
   let tick = document.createElement('span');
@@ -34,12 +35,15 @@ function createListItem(obj) {
 function render(type) {
   let fragment = document.createDocumentFragment();
   if (type == 'all') {
+    let ind = 0;
     for (itemObj of listItems) {
-      fragment.appendChild(createListItem(itemObj));
+      fragment.appendChild(createListItem(itemObj, ind++));
     }
   }
-  console.log(fragment);
+
+  //insert the elements
   document.getElementById('to_do_list').innerHTML = '';
+  console.log("appeinding Child");
   document.getElementById('to_do_list').appendChild(fragment);
 }
 
@@ -57,5 +61,23 @@ inputField.addEventListener('keydown', function (event) {
     render('all');
     //clear the input field
     inputField.value = null;
+  }
+})
+
+//add event listeners for tick and cross
+
+document.addEventListener('click', function (event) {
+  let targetElem = event.target.closest(".ticked, .unTicked, .cross, #all, #finished #unfinished");
+
+  if (!targetElem) return;
+
+  if (targetElem.className == 'ticked') { //make it unticked
+    let ind = targetElem.closest('li').dataset.index;
+    listItems[ind].type = "unTicked";
+    render('all');
+  } else if (targetElem.className == 'unTicked') { //make it ticked
+    let ind = targetElem.closest('li').dataset.index;
+    listItems[ind].type = "ticked";
+    render('all');
   }
 })
