@@ -39,6 +39,21 @@ function createListItem(obj, ind) {
 
   return li;
 }
+//logic for toggling active buttons
+function toggle(type) {
+  if (type == 'ticked') type = 'finished';
+  else if (type == 'unTicked') type = 'unfinished';
+  let optionButtons = [document.getElementById('all'), document.getElementById('finished'), document.getElementById('unfinished')];
+  for (let option of optionButtons) {
+    if (option.id == type) {
+      option.classList.add('active');
+      console.log(option);
+    } else {
+      option.classList.remove('active');
+      console.log(option);
+    }
+  }
+}
 //logic for rendering the list
 function render(type) {
   let fragment = document.createDocumentFragment();
@@ -57,6 +72,10 @@ function render(type) {
   document.getElementById('to_do_list').innerHTML = '';
   //console.log("appeinding Child");
   document.getElementById('to_do_list').appendChild(fragment);
+
+
+  //toggle active buttons
+  toggle(type);
 }
 
 //logic for recreating listItems form DOM
@@ -88,8 +107,8 @@ inputField.addEventListener('keydown', function (event) {
   }
 })
 
-//add event listeners for tick and cross
 
+//add event listeners for tick and cross and options
 document.addEventListener('click', function (event) {
   let targetElem = event.target.closest(".ticked, .unTicked, .cross, #all, #finished, #unfinished");
 
