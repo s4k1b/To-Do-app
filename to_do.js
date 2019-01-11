@@ -47,12 +47,19 @@ function toggle(type) {
   for (let option of optionButtons) {
     if (option.id == type) {
       option.classList.add('active');
-      console.log(option);
     } else {
       option.classList.remove('active');
-      console.log(option);
     }
   }
+}
+//logic for displaying tasks left
+function tasksLeftField(num) {
+  let msg;
+  if (num == 0) msg = `All tasks done!`;
+  else if (num == 1) msg = `Only 1 task left to do.`;
+  else msg = `${num} tasks left to do.`
+
+  document.getElementById('tasks_left').innerHTML = msg;
 }
 //logic for rendering the list
 function render(type) {
@@ -73,9 +80,12 @@ function render(type) {
   //console.log("appeinding Child");
   document.getElementById('to_do_list').appendChild(fragment);
 
-
   //toggle active buttons
   toggle(type);
+
+  //display tasks left
+  let num = newList.filter(item => item.type == 'unTicked').length;
+  tasksLeftField(num);
 }
 
 //logic for recreating listItems form DOM
@@ -107,12 +117,10 @@ inputField.addEventListener('keydown', function (event) {
   }
 })
 
-
 //add event listeners for tick and cross and options
 document.addEventListener('click', function (event) {
   let targetElem = event.target.closest(".ticked, .unTicked, .cross, #all, #finished, #unfinished");
 
-  console.log(targetElem);
   if (!targetElem) return;
 
   if (targetElem.className == 'ticked') { //make it unticked
