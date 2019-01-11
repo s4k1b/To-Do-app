@@ -4,6 +4,13 @@ function createListItem(obj, ind) {
   let li = document.createElement('li');
   li.className = 'item';
   li.dataset.index = ind;
+  //add necessary event listeners
+  li.addEventListener('mouseenter', function (event) {
+    cross.hidden = false;
+  })
+  li.addEventListener('mouseleave', function (event) {
+    cross.hidden = true;
+  })
 
   //create tick
   let tick = document.createElement('span');
@@ -26,6 +33,7 @@ function createListItem(obj, ind) {
   let cross = document.createElement('span');
   cross.innerHTML = '[X]';
   cross.className = 'cross';
+  cross.hidden = true;
   //insert
   li.append(cross);
 
