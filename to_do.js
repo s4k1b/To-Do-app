@@ -43,8 +43,20 @@ function render(type) {
 
   //insert the elements
   document.getElementById('to_do_list').innerHTML = '';
-  console.log("appeinding Child");
+  //console.log("appeinding Child");
   document.getElementById('to_do_list').appendChild(fragment);
+}
+
+//logic for recreating listItems form DOM
+function reCreate() {
+  let newListItems = [];
+  for (item of document.getElementById('to_do_list').children) {
+    newListItems.push({
+      text: item.firstElementChild.nextElementSibling.innerHTML,
+      type: item.firstElementChild.className
+    })
+  }
+  listItems = newListItems;
 }
 
 let inputField = document.getElementById('input_item');
@@ -78,6 +90,14 @@ document.addEventListener('click', function (event) {
   } else if (targetElem.className == 'unTicked') { //make it ticked
     let ind = targetElem.closest('li').dataset.index;
     listItems[ind].type = "ticked";
+    render('all');
+  } else if (targetElem.className == 'cross') {
+    let item = targetElem.closest('li');
+    //remove the item from the list
+    item.remove();
+    //update the listItems
+    reCreate();
+    // render the list
     render('all');
   }
 })
